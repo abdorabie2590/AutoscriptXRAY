@@ -1,0 +1,122 @@
+#!/bin/bash
+# ==========================================
+# MENU UDP ZIVPN
+# ==========================================
+
+clear
+
+RED='\033[1;38;5;203m'
+GREEN='\033[1;38;5;48m'
+YELLOW='\033[1;38;5;220m'
+BLUE='\033[1;38;5;99m'
+CYAN='\033[1;38;5;51m'
+WHITE='\033[1;38;5;231m'
+NC='\033[0m'
+
+# theme
+for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
+    [[ -f "$_t" ]] && { source "$_t"; break; }
+done
+
+# ==============================
+# STATUS
+# ==============================
+
+ZIVPN=$(systemctl is-active zivpn)
+
+if [[ $ZIVPN == "active" ]]; then
+    ZIVPN="${GREEN}🟢 ONLINE${NC}"
+else
+    ZIVPN="${RED}🔴 OFFLINE${NC}"
+fi
+
+# ==============================
+# USER COUNT
+# ==============================
+
+TOTAL=$(grep -vc '^$' /etc/zivpn/users.db 2>/dev/null)
+
+# ==============================
+# DOMAIN
+# ==============================
+
+DOMAIN=$(cat /etc/xray/domain 2>/dev/null)
+
+if [[ -z "$DOMAIN" ]]; then
+    DOMAIN=$(curl -s ipv4.icanhazip.com)
+fi
+
+# ==============================
+# HEADER
+# ==============================
+
+theme_banner "UDP ZIVPN MENU"
+
+# ==============================
+# INFO
+# ==============================
+
+theme_section "INFO"
+
+printf " ${AQUA}🌍 DOMAIN${NC}      : %-25s\n" "$DOMAIN"
+printf " ${AQUA}⚡ STATUS${NC}      : %-25b\n" "$ZIVPN"
+printf " ${AQUA}👤 TOTAL USER${NC}  : %-25s\n" "$TOTAL"
+printf " ${AQUA}🔌 UDP PORT${NC}    : %-25s\n" "5667"
+
+theme_end
+
+# ==============================
+# MENU
+# ==============================
+
+theme_section "MENU"
+
+echo -e " ${MAGENTA}❮${GOLD}1${MAGENTA}❯${NC} ➕ Add User        ${MAGENTA}❮${GOLD}5${MAGENTA}❯${NC} 👥 Check Member"
+echo -e " ${MAGENTA}❮${GOLD}2${MAGENTA}❯${NC} 🎁 Trial User      ${MAGENTA}❮${GOLD}6${MAGENTA}❯${NC} 📡 Online User"
+echo -e " ${MAGENTA}❮${GOLD}3${MAGENTA}❯${NC} ♻️ Renew User      ${MAGENTA}❮${GOLD}7${MAGENTA}❯${NC} 🔄 Restart Service"
+echo -e " ${MAGENTA}❮${GOLD}4${MAGENTA}❯${NC} ❌ Delete User     ${MAGENTA}❮${GOLD}8${MAGENTA}❯${NC} 📜 Check Log"
+echo -e "                        ${MAGENTA}❮${GOLD}x${MAGENTA}❯${NC} ⬅ BACK"
+
+theme_end
+
+echo ""
+read -rp "$(echo -e "${GOLD}❯ Select Menu : ${NC}")" opt
+
+case $opt in
+1)
+bash /etc/autoscriptvpn/udp/add-zivpn.sh
+;;
+2)
+bash /etc/autoscriptvpn/udp/trial-zivpn.sh
+;;
+3)
+bash /etc/autoscriptvpn/udp/renew-zivpn.sh
+;;
+4)
+bash /etc/autoscriptvpn/udp/del-zivpn.sh
+;;
+5)
+bash /etc/autoscriptvpn/udp/cek-zivpn.sh
+;;
+6)
+bash /etc/autoscriptvpn/udp/monitor-zivpn.sh
+;;
+7)
+systemctl restart zivpn
+echo ""
+echo -e "${GREEN}ZIVPN service restarted successfully!${NC}"
+sleep 2
+exec "$0"
+;;
+8)
+journalctl -u zivpn --no-pager -n 20
+;;
+x)
+menu
+;;
+*)
+echo "❌ Pilihan salah!"
+sleep 1
+exec m-zivpn
+;;
+esac

@@ -1,0 +1,66 @@
+#!/bin/bash
+# Menu WireGuard - by Eng.Abdelrahman Rabie
+
+# Warna
+GREEN='\e[1;38;5;48m'
+YELLOW='\e[1;38;5;220m'
+CYAN='\e[1;38;5;51m'
+NC='\e[0m'
+
+# theme
+for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
+    [[ -f "$_t" ]] && { source "$_t"; break; }
+done
+
+clear
+theme_banner "MENU WIREGUARD VPN"
+theme_item "1" "Tambah Akun WireGuard"
+theme_item "2" "Hapus Akun WireGuard"
+theme_item "3" "Lihat Konfigurasi Akun"
+theme_item "4" "Cek Status WireGuard"
+theme_item "5" "Restart WireGuard"
+theme_item "x" "Kembali ke menu utama"
+theme_footer
+read -p "$(echo -e "${GOLD}👉 Pilih opsi: ${NC}")" opt
+
+case $opt in
+
+1)
+clear
+bash /etc/autoscriptvpn/wg/wg-add.sh
+;;
+
+2)
+clear
+bash /etc/autoscriptvpn/wg/wg-del.sh
+;;
+
+3)
+clear
+bash /etc/autoscriptvpn/wg/wg-show.sh
+;;
+
+4)
+clear
+wg show
+;;
+
+5)
+clear
+systemctl restart wg-quick@wg0
+
+echo ""
+echo "✅ WireGuard direstart!"
+echo ""
+;;
+
+x)
+menu
+;;
+
+*)
+echo "❌ Pilihan salah!"
+sleep 1
+exec m-wg
+;;
+esac

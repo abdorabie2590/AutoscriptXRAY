@@ -1,0 +1,51 @@
+#!/bin/bash
+# Menu VMess - by Eng.Abdelrahman Rabie
+
+GREEN='\e[1;38;5;48m'
+YELLOW='\e[1;38;5;220m'
+CYAN='\e[1;38;5;51m'
+NC='\e[0m'
+
+# theme
+for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
+    [[ -f "$_t" ]] && { source "$_t"; break; }
+done
+
+clear
+theme_banner "MENU VMESS XRAY"
+theme_item "1" "Tambah Akun VMess"
+theme_item "2" "Hapus Akun VMess"
+theme_item "3" "Cek Login VMess"
+theme_item "4" "Perpanjang Masa Aktif Akun"
+theme_item "x" "Kembali ke menu utama"
+theme_footer
+
+read -p "$(echo -e "${GOLD}👉 Pilih opsi: ${NC}")" opt
+
+case $opt in
+1)
+bash /etc/autoscriptvpn/xray/add-vmess.sh
+;;
+
+2)
+bash /etc/autoscriptvpn/xray/del-vmess.sh
+;;
+
+3)
+bash /etc/autoscriptvpn/xray/cek-vmess.sh
+;;
+
+4)
+bash /etc/autoscriptvpn/xray/renew-vmess.sh
+;;
+
+x)
+menu
+;;
+
+*)
+echo "❌ Pilihan salah!"
+sleep 1
+exec m-vmess
+;;
+esac

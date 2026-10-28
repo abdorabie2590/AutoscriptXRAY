@@ -1,0 +1,50 @@
+#!/bin/bash
+# Menu Trojan - by Eng.Abdelrahman Rabie
+
+# Warna
+GREEN='\e[1;38;5;48m'
+YELLOW='\e[1;38;5;220m'
+CYAN='\e[1;38;5;51m'
+NC='\e[0m'
+
+# theme
+for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
+    [[ -f "$_t" ]] && { source "$_t"; break; }
+done
+
+clear
+theme_banner "MENU TROJAN XRAY"
+theme_item "1" "Tambah Akun Trojan"
+theme_item "2" "Hapus Akun Trojan"
+theme_item "3" "Cek Login Trojan"
+theme_item "4" "Perpanjang Masa Aktif Akun"
+theme_item "x" "Kembali ke menu utama"
+theme_footer
+
+read -p "$(echo -e "${GOLD}👉 Pilih opsi: ${NC}")" opt
+
+case $opt in
+1) 
+bash /etc/autoscriptvpn/xray/add-trojan.sh 
+;;
+
+2) 
+bash /etc/autoscriptvpn/xray/del-trojan.sh 
+;;
+
+3)
+bash /etc/autoscriptvpn/xray/cek-trojan.sh 
+;;
+
+4) 
+bash /etc/autoscriptvpn/xray/renew-trojan.sh 
+;;
+
+x) 
+menu 
+;;
+*) echo "❌ Pilihan salah!"
+sleep 1
+exec m-trojan
+;;
+esac

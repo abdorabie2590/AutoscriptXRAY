@@ -1,0 +1,109 @@
+#!/bin/bash
+
+clear
+
+GREEN='\033[0;38;5;48m'
+CYAN='\033[0;38;5;51m'
+YELLOW='\033[1;38;5;220m'
+RED='\033[0;38;5;203m'
+NC='\033[0m'
+
+# theme
+for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
+    [[ -f "$_t" ]] && { source "$_t"; break; }
+done
+
+theme_banner "MENU SSH WS"
+
+theme_item "1" "Add SSH Account"
+theme_item "2" "Trial SSH Account"
+theme_item "3" "Renew SSH Account"
+theme_item "4" "Delete SSH Account"
+theme_item "5" "Check User Login"
+theme_item "6" "List Member SSH"
+theme_item "7" "Delete Expired SSH"
+theme_item "8" "Check Service SSH"
+theme_item "9" "Restart Service SSH"
+theme_item "x" "Exit"
+
+echo ""
+read -p "$(echo -e "${GOLD}❯ Select Menu : ${NC}")" x
+
+case $x in
+
+1)
+clear
+bash /etc/autoscriptvpn/ssh/addssh.sh
+;;
+
+2)
+clear
+echo "Trial SSH - Coming Soon"
+;;
+
+3)
+clear
+echo "Renew SSH - Coming Soon"
+;;
+
+4)
+clear
+echo "Delete SSH - Coming Soon"
+;;
+
+5)
+clear
+echo "Check Login SSH - Coming Soon"
+;;
+
+6)
+clear
+echo "List Member SSH - Coming Soon"
+;;
+
+7)
+clear
+echo "Delete Expired SSH - Coming Soon"
+;;
+
+8)
+clear
+systemctl status ssh --no-pager
+echo ""
+systemctl status dropbear --no-pager
+echo ""
+systemctl status ws-dropbear --no-pager
+echo ""
+systemctl status ws-stunnel --no-pager
+echo ""
+systemctl status udp-custom --no-pager
+echo ""
+systemctl status udpgw --no-pager
+;;
+
+9)
+clear
+
+systemctl restart ssh
+systemctl restart dropbear
+systemctl restart ws-dropbear
+systemctl restart ws-stunnel
+systemctl restart udp-custom
+systemctl restart udpgw
+
+echo ""
+echo -e "${GREEN}[ OK ] All SSH Service Restarted${NC}"
+echo ""
+
+;;
+
+x)
+exit
+;;
+
+*)
+echo "❌ Pilihan salah!"
+sleep 1
+exec m-ssh
+;;
+esac
