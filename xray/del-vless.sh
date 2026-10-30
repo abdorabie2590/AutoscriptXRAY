@@ -21,8 +21,8 @@ CONFIG="/etc/xray/config.json"
 users=$(jq -r '.inbounds[] | select(.tag=="vless-tls") | .settings.clients[].email' $CONFIG)
 
 if [[ -z "$users" ]]; then
-echo -e "${RED}Tidak ada user VLESS!${NC}"
-read -n 1 -s -r -p "Tekan apa saja untuk kembali..."
+echo -e "${RED}No VLESS users found!${NC}"
+read -n 1 -s -r -p "Press any key to return..."
 m-vless
 exit
 fi
@@ -36,7 +36,7 @@ done
 
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-read -rp "👉 Masukkan username yang ingin dihapus: " user
+read -rp "👉 Enter the username to delete: " user
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 jq --arg user "$user" '
@@ -48,15 +48,15 @@ map(select(.email != $user))
 
 mv /tmp/config.json $CONFIG
 
-# hapus comment expiry
+# remove expiry comment
 sed -i "/#vless $user/d" $CONFIG
 
 systemctl restart xray
 
 echo ""
-echo -e "${GREEN}✅ User VLESS '${user}' berhasil dihapus!${NC}"
+echo -e "${GREEN}✅ VLESS user '${user}' deleted successfully!${NC}"
 echo ""
 
-read -n 1 -s -r -p "Tekan apa saja untuk kembali ke menu..."
+read -n 1 -s -r -p "Press any key to return to the menu..."
 
 m-vless

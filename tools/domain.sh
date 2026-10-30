@@ -1,7 +1,7 @@
 #!/bin/bash
-# Atur ulang domain - by Eng.Abdelrahman Rabie
+# Reset domain - by Eng.Abdelrahman Rabie
 
-# Warna
+# Colors
 CYAN='\e[1;38;5;51m'
 GREEN='\e[1;38;5;48m'
 YELLOW='\e[1;38;5;220m'
@@ -9,25 +9,25 @@ NC='\e[0m'
 
 clear
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${YELLOW}              🌐 GANTI DOMAIN XRAY            ${NC}"
+echo -e "${YELLOW}              🌐 CHANGE XRAY DOMAIN            ${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-# Minta domain baru
-read -rp "📌 Masukkan domain baru: " new_domain
+# Ask for new domain
+read -rp "📌 Enter the new domain: " new_domain
 
-# Validasi input
+# Validate input
 if [[ -z "$new_domain" ]]; then
-    echo -e "${YELLOW}❌ Domain tidak boleh kosong!${NC}"
+    echo -e "${YELLOW}❌ Domain must not be empty!${NC}"
     exit 1
 fi
 
-# Simpan domain baru ke file
+# Save new domain to file
 echo "$new_domain" > /etc/xray/domain
 
 # Restart service
 systemctl restart xray
 
 # Output
-echo -e "${GREEN}✅ Domain berhasil diganti!${NC}"
-echo -e "🌐 Domain baru: ${CYAN}$new_domain${NC}"
+echo -e "${GREEN}✅ Domain changed successfully!${NC}"
+echo -e "🌐 New domain: ${CYAN}$new_domain${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

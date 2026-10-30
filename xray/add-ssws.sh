@@ -6,7 +6,7 @@ echo -e "\033[1;38;5;135m━━━━━━━━━━━━━━━━━━�
 echo -e "\E[48;5;54;1;38;5;231m     Add Shadowsocks Account     \E[0m"
 echo -e "\033[1;38;5;135m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
-# ambil domain
+# read domain
 domain=$(cat /etc/xray/domain)
 
 # public nginx port
@@ -14,12 +14,12 @@ port_tls="443"
 port_none="80"
 port_grpc="443"
 
-# input username
+# user inputname
 until [[ $user =~ ^[a-zA-Z0-9_]+$ ]]; do
     read -rp "Username : " user
 done
 
-# cek duplicate user
+# check duplicate user
 CLIENT_EXISTS=$(jq -r '.inbounds[].settings.clients[]?.email' /etc/xray/config.json | grep -w "$user" | wc -l)
 
 if [[ ${CLIENT_EXISTS} == '1' ]]; then
@@ -28,11 +28,11 @@ if [[ ${CLIENT_EXISTS} == '1' ]]; then
     exit 1
 fi
 
-read -rp "Expired (days): " masaaktif
+read -rp "Expired (days): " validity_days
 
 cipher="aes-128-gcm"
 uuid=$(cat /proc/sys/kernel/random/uuid)
-exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+exp=$(date -d "$validity_days days" +"%Y-%m-%d")
 
 # validasi config lama
 if ! jq empty /etc/xray/config.json >/dev/null 2>&1; then
@@ -47,7 +47,7 @@ cp /etc/xray/config.json /etc/xray/config.json.bak
 # temp file
 tmpfile=$(mktemp)
 
-# inject user ke config
+# inject user into config
 if ! jq --arg uuid "$uuid" --arg user "$user" --arg method "$cipher" '
 (.inbounds[] | select(.tag=="ssws-ws-tls").settings.clients) +=
 [{
@@ -78,7 +78,7 @@ if ! jq --arg uuid "$uuid" --arg user "$user" --arg method "$cipher" '
 
 fi
 
-# cek file kosong
+# check empty file
 if [[ ! -s "$tmpfile" ]]; then
     echo ""
     echo "ERROR: Config generated empty!"
@@ -86,7 +86,7 @@ if [[ ! -s "$tmpfile" ]]; then
     exit 1
 fi
 
-# validasi json
+# validate json
 if ! jq empty "$tmpfile" >/dev/null 2>&1; then
     echo ""
     echo "ERROR: Invalid JSON!"
@@ -97,7 +97,7 @@ fi
 # replace config
 mv "$tmpfile" /etc/xray/config.json
 
-# test config xray
+# test xray config
 if ! xray -test -config /etc/xray/config.json >/dev/null 2>&1; then
 
     echo ""
@@ -113,7 +113,7 @@ fi
 # restart xray
 systemctl restart xray
 
-# cek status xray
+# check xray status
 if ! systemctl is-active --quiet xray; then
 
     echo ""
@@ -128,7 +128,7 @@ if ! systemctl is-active --quiet xray; then
 
 fi
 
-# simpan database user
+# save user database
 echo "${user} ${exp} ${uuid}" >> /etc/xray/ssws.db
 
 # encode password

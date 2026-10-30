@@ -1,7 +1,7 @@
-# ✦ Autoscript XRAY — Royal Neon Edition ✦
+# ✦ Abdelrahman AutoScript ✦
 
 > **Developed by Eng.Abdelrahman Rabie**
-> Redesigned interface: violet → magenta gradient, neon accents, framed menus and a shared theme engine (`theme.sh`).
+> Interface: violet → magenta gradient, neon accents, framed menus and a shared theme engine (`theme.sh`).
 
 
 ## Features

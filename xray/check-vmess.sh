@@ -10,7 +10,7 @@ LOG="/var/log/xray/access.log"
 CONFIG="/etc/xray/config.json"
 
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "\E[48;5;54;1;38;5;231m            CEK LOGIN VMESS USER             \E[0m"
+echo -e "\E[48;5;54;1;38;5;231m            CHECK VMESS USER LOGIN             \E[0m"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
@@ -37,6 +37,6 @@ done
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -n 1 -s -r -p "Tekan apa saja untuk kembali ke menu..."
+read -n 1 -s -r -p "Press any key to return to the menu..."
 
 m-vmess

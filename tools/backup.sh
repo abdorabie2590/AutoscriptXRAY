@@ -1,7 +1,7 @@
 #!/bin/bash
 # Backup tool - by Eng.Abdelrahman Rabie
 
-# Warna
+# Colors
 GREEN='\e[1;38;5;48m'
 YELLOW='\e[1;38;5;220m'
 CYAN='\e[1;38;5;51m'
@@ -13,28 +13,28 @@ echo -e "${YELLOW}            🔄 BACKUP & RESTORE TOOLS         ${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${GREEN}[1]${NC} Backup Data"
 echo -e "${GREEN}[2]${NC} Restore Data"
-echo -e "${GREEN}[x]${NC} Kembali ke menu"
+echo -e "${GREEN}[x]${NC} Back to menu"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-read -p "👉 Pilih opsi: " opt
+read -p "👉 Select option: " opt
 
 backup_folder="/root/backup-autoscript"
 mkdir -p "$backup_folder"
 
 case $opt in
 1)
-  echo -e "\n📦 Membuat backup..."
+  echo -e "\n📦 Creating backup..."
   cp -r /etc/xray/config.json $backup_folder/ 2>/dev/null
   cp -r /etc/xray/domain $backup_folder/ 2>/dev/null
   cp -r /usr/bin/* $backup_folder/ 2>/dev/null
 
   cd /root
   zip -r backup-autoscript.zip backup-autoscript >/dev/null
-  echo -e "\n✅ Backup selesai!"
+  echo -e "\n✅ Backup completed!"
   echo -e "📁 File: /root/backup-autoscript.zip"
-  echo -e "${YELLOW}Simpan file zip ini untuk restore nanti.${NC}"
+  echo -e "${YELLOW}Keep this zip file for restoring later.${NC}"
   ;;
 2)
-  read -p "🗂 Masukkan path file ZIP backup: " path
+  read -p "🗂 Enter the path of the backup ZIP file: " path
   if [[ -f "$path" ]]; then
     echo -e "\n🔄 Restore data..."
     unzip "$path" -d /root >/dev/null
@@ -42,11 +42,11 @@ case $opt in
     cp -r /root/backup-autoscript/domain /etc/xray/
     cp -r /root/backup-autoscript/* /usr/bin/
     systemctl restart xray
-    echo -e "\n✅ Restore selesai!"
+    echo -e "\n✅ Restore completed!"
   else
-    echo -e "❌ File backup tidak ditemukan!"
+    echo -e "❌ Backup file not found!"
   fi
   ;;
 x) menu ;;
-*) echo "❌ Pilihan salah!" ; sleep 1 ; bash $0 ;;
+*) echo "❌ Invalid option!" ; sleep 1 ; bash $0 ;;
 esac

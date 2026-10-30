@@ -10,14 +10,14 @@ LOG="/var/log/xray/access.log"
 CONFIG="/etc/xray/config.json"
 
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "\E[48;5;54;1;38;5;231m            CEK LOGIN TROJAN USER            \E[0m"
+echo -e "\E[48;5;54;1;38;5;231m            CHECK VLESS USER LOGIN             \E[0m"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
 printf "%-15s %-18s\n" "USERNAME" "IP CLIENT"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-users=$(jq -r '.inbounds[] | select(.tag=="trojan-tls") | .settings.clients[].email' $CONFIG)
+users=$(jq -r '.inbounds[] | select(.tag=="vless-tls") | .settings.clients[].email' $CONFIG)
 
 ips=$(grep "accepted" $LOG \
 | awk -F'from ' '{print $2}' \
@@ -37,6 +37,6 @@ done
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -n 1 -s -r -p "Tekan apa saja untuk kembali ke menu..."
+read -n 1 -s -r -p "Press any key to return to the menu..."
 
-m-trojan
+m-vless

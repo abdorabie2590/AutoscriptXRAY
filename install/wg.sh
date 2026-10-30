@@ -1,13 +1,13 @@
 #!/bin/bash
-# Install WireGuard + konfigurasi awal
+# Install WireGuard + initial configuration
 # By Eng.Abdelrahman Rabie
 
 GREEN='\033[0;38;5;48m'
 NC='\033[0m'
 
-echo -e "${GREEN}▶️ Memulai instalasi WireGuard...${NC}"
+echo -e "${GREEN}▶️ Starting WireGuard installation...${NC}"
 
-# Install dependensi
+# Install dependencies
 apt update -y
 
 apt install -y \
@@ -16,7 +16,7 @@ apt install -y \
     qrencode \
     resolvconf
 
-# Buat direktori config
+# Create config directory
 mkdir -p /etc/wireguard
 cd /etc/wireguard || exit
 
@@ -24,20 +24,20 @@ cd /etc/wireguard || exit
 privkey=$(wg genkey)
 pubkey=$(echo "$privkey" | wg pubkey)
 
-# Simpan private dan public key
+# Save private and public keys
 echo "$privkey" > private.key
 echo "$pubkey" > public.key
 chmod 600 private.key
 chmod 644 public.key
 
-# Ambil interface default (eth0/fallback)
+# Get default interface (eth0/fallback)
 interface=$(ip route | grep default | awk '{print $5}' | head -n1)
 
 if [[ -z "$interface" ]]; then
     echo "[ERROR] Failed to detect network interface!"
     exit 1
 fi
-# Buat konfigurasi wg0.conf
+# Create wg0.conf configuration
 cat > wg0.conf <<EOF
 [Interface]
 Address = 10.66.66.1/24
@@ -48,7 +48,7 @@ PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j A
 SaveConfig = true
 EOF
 
-# Aktifkan IP forwarding
+# Enable IP forwarding
 cat > /etc/sysctl.d/30-wg.conf <<EOF
 net.ipv4.ip_forward=1
 EOF
@@ -62,7 +62,7 @@ wg-quick strip wg0 >/dev/null 2>&1 || {
     exit 1
 }
 
-# Enable dan start service
+# Enable and start service
 
 systemctl enable wg-quick@wg0
 systemctl start wg-quick@wg0
@@ -74,9 +74,9 @@ systemctl is-active --quiet wg-quick@wg0 || {
     journalctl -u wg-quick@wg0 -n 20 --no-pager
     exit 1
 }
-# Tambahkan ke /root/log-install.txt
+# Append to /root/log-install.txt
 touch /root/log-install.txt
 grep -q "WireGuard" /root/log-install.txt || \
 echo "WireGuard        : 51820" >> /root/log-install.txt
 
-echo -e "${GREEN}✅ WireGuard berhasil di-install & aktif di port 51820!${NC}"
+echo -e "${GREEN}✅ WireGuard installed and active on port 51820!${NC}"

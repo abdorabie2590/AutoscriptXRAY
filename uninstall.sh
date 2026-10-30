@@ -15,17 +15,17 @@ BASE_DIR="/root/AutoscriptXRAY"
 # ================= CHECK ROOT =================
 
 if [[ $EUID -ne 0 ]]; then
-echo -e "${RED}[ERROR] Jalankan script sebagai root!${NC}"
+echo -e "${RED}[ERROR] Run this script as root!${NC}"
 exit 1
 fi
 
 # ================= FUNCTION =================
 
 confirm() {
-read -rp "❗ Yakin ingin menghapus semua layanan AutoscriptXRAY? [y/N]: " confirm
+read -rp "❗ Are you sure you want to remove all AutoscriptXRAY services? [y/N]: " confirm
 
 [[ "$confirm" =~ ^[Yy]$ ]] || {
-    echo -e "${YELLOW}Batal uninstall.${NC}"
+    echo -e "${YELLOW}Uninstall cancelled.${NC}"
     exit 1
 }
 

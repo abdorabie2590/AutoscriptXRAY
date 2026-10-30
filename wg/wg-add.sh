@@ -1,12 +1,12 @@
 #!/bin/bash
-# Tambah akun WireGuard - by Eng.Abdelrahman Rabie
+# Add WireGuard account - by Eng.Abdelrahman Rabie
 
 [[ -f /etc/wireguard/wg0.conf ]] || {
     echo "WireGuard is not installed!"
     exit 1
 }
 
-read -p "Masukkan nama user: " user
+read -p "Enter username: " user
 
 [[ "$user" =~ ^[a-zA-Z0-9_-]+$ ]] || {
     echo "Invalid username!"
@@ -41,7 +41,7 @@ fi
 
 client_ip="10.66.66.${next_ip}/32"
 
-# Buat folder klien
+# Create client folder
 mkdir -p /etc/wireguard/clients
 client_config="/etc/wireguard/clients/$user.conf"
 
@@ -56,10 +56,10 @@ server_ip=$(curl -s --max-time 5 ifconfig.me)
 server_port=$(grep ListenPort /etc/wireguard/wg0.conf | awk '{print $3}')
 server_pubkey=$(wg show wg0 public-key)
 
-# Tambah ke config server
+# Add to server config
 echo -e "\n# $user\n[Peer]\nPublicKey = $pub_key\nPresharedKey = $psk\nAllowedIPs = $client_ip" >> /etc/wireguard/wg0.conf
 
-# Buat config klien
+# Create client config
 cat > "$client_config" <<EOF
 [Interface]
 PrivateKey = $priv_key
@@ -91,8 +91,8 @@ systemctl is-active --quiet wg-quick@wg0 || {
     exit 1
 }
 
-# Tampilkan config + QR
-echo -e "\n✅ Akun WireGuard '$user' berhasil dibuat!"
+# Show config + QR
+echo -e "\n✅ WireGuard account '$user' created successfully!"
 echo -e "📄 Config:\n"
 cat "$client_config"
 

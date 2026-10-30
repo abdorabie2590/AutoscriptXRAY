@@ -1,7 +1,7 @@
 #!/bin/bash
-# Menu Tools by Eng.Abdelrahman Rabie
+# Tools menu by Eng.Abdelrahman Rabie
 
-# Warna
+# Colors
 CYAN='\e[1;38;5;51m'
 GREEN='\e[1;38;5;48m'
 YELLOW='\e[1;38;5;220m'
@@ -16,11 +16,11 @@ clear
 theme_banner "MENU TOOLS"
 theme_item "1" "Backup & Restore Config"
 theme_item "2" "Speedtest VPS"
-theme_item "3" "Ganti Domain XRAY"
-theme_item "4" "Cek status layanan aktif"
-theme_item "x" "Kembali ke menu utama"
+theme_item "3" "Change XRAY Domain"
+theme_item "4" "Check Active Services"
+theme_item "x" "Back to main menu"
 theme_footer
-read -p "$(echo -e "${GOLD}👉 Pilih opsi: ${NC}")" opt
+read -p "$(echo -e "${GOLD}👉 Select option: ${NC}")" opt
 
 case $opt in
 1) bash /etc/autoscriptvpn/tools/backup.sh ;;
@@ -28,5 +28,5 @@ case $opt in
 3) bash /etc/autoscriptvpn/tools/domain.sh ;;
 4) bash /etc/autoscriptvpn/tools/running.sh ;;
 x) menu ;;
-*) echo "❌ Pilihan salah!" ; sleep 1 ; tools-menu ;;
+*) echo "❌ Invalid option!" ; sleep 1 ; tools-menu ;;
 esac

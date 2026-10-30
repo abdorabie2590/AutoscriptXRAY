@@ -11,11 +11,11 @@ NC='\033[0m'
 CONFIG="/etc/xray/config.json"
 
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "\E[48;5;54;1;38;5;231m            PERPANJANG AKUN TROJAN           \E[0m"
+echo -e "\E[48;5;54;1;38;5;231m            RENEW TROJAN ACCOUNT           \E[0m"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-echo -e "${CYAN}📋 Daftar User Trojan:${NC}"
+echo -e "${CYAN}📋 Trojan User List:${NC}"
 echo ""
 
 users=$(jq -r '.inbounds[] | select(.tag=="trojan-tls") | .settings.clients[].email' $CONFIG)
@@ -28,24 +28,24 @@ done
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -rp "Masukkan username yang ingin diperpanjang: " user
+read -rp "Enter the username to renew: " user
 
 if ! echo "$users" | grep -w "$user" >/dev/null; then
-echo -e "${RED}User tidak ditemukan!${NC}"
+echo -e "${RED}User not found!${NC}"
 sleep 2
 m-trojan
 exit
 fi
 
-read -rp "Tambahkan masa aktif (hari): " masaaktif
+read -rp "Add validity (days): " validity_days
 
-exp=$(date -d "$masaaktif days" +"%Y-%m-%d")
+exp=$(date -d "$validity_days days" +"%Y-%m-%d")
 
 systemctl restart xray
 
 clear
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "\E[48;5;54;1;38;5;231m            AKUN BERHASIL DIPERPANJANG       \E[0m"
+echo -e "\E[48;5;54;1;38;5;231m            ACCOUNT RENEWED SUCCESSFULLY       \E[0m"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 echo -e "User      : ${GREEN}$user${NC}"
@@ -53,6 +53,6 @@ echo -e "Expired   : ${GREEN}$exp${NC}"
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -n 1 -s -r -p "Tekan apa saja untuk kembali..."
+read -n 1 -s -r -p "Press any key to return..."
 
 m-trojan

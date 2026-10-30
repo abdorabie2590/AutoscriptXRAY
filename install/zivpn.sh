@@ -61,7 +61,7 @@ systemctl stop zivpn >/dev/null 2>&1
 echo -e "${YELLOW}[*] Downloading ZIVPN binary...${NC}"
 
 wget -q -O /usr/local/bin/zivpn \
-https://github.com/zahidbd2/udp-zivpn/releases/download/udp-zivpn_1.4.9/udp-zivpn-linux-amd64
+https://github.com/abdorabie2590/AutoscriptXRAY/releases/download/deps-v2/udp-zivpn-linux-amd64
 
 chmod +x /usr/local/bin/zivpn
 

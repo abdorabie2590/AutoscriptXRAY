@@ -1,12 +1,12 @@
 #!/bin/bash
-# Cek login SS WS - by Eng.Abdelrahman Rabie
+# Check SS WS login - by Eng.Abdelrahman Rabie
 
-echo -e "🔍 Log koneksi aktif SS WS:"
+echo -e "🔍 Active SS WS connection log:"
 echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 log_file="/var/log/xray/access.log"
 
 if [[ ! -f $log_file ]]; then
-    echo "❌ Log file tidak ditemukan!"
+    echo "❌ Log file not found!"
     exit 1
 fi
 

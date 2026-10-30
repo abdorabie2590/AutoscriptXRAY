@@ -1,7 +1,7 @@
 #!/bin/bash
-# Lihat daftar akun aktif WireGuard - by Eng.Abdelrahman Rabie
+# List active WireGuard accounts - by Eng.Abdelrahman Rabie
 
-echo -e "🔍 Daftar Akun Aktif WireGuard:"
+echo -e "🔍 Active WireGuard Accounts:"
 echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 wg show wg0
 echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

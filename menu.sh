@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ABDELRAHMAN RABIE XRAY PANEL
-# Developed by Eng.Abdelrahman Rabie
+# Abdelrahman AutoScript
+# Developer: Eng.Abdelrahman Rabie
 
 # ================= COLOR =================
-PANEL_VERSION="v3.0.0"
+PANEL_VERSION="V3.0"
 
 # ================= THEME =================
 for _t in /etc/autoscriptvpn/theme.sh /root/AutoscriptXRAY/theme.sh; do
@@ -52,11 +52,10 @@ type_text() {
 
 # ================= SYSTEM INFO =================
 
-IP=$(curl -s ipv4.icanhazip.com)
+IP=$(get_public_ip)
 DOMAIN=$(cat /etc/xray/domain 2>/dev/null || echo "N/A")
 
-ISP=$(curl -s --max-time 3 ipinfo.io/org | cut -d " " -f2-)
-[[ -z "$ISP" ]] && ISP="Unknown"
+ISP=$(get_isp "$IP")
 
 UPTIME=$(uptime -p | sed 's/up //')
 TIME=$(date "+%d-%m-%Y %H:%M:%S")
@@ -179,7 +178,7 @@ cut -d':' -f2 | sort -u | wc -l)
 clear
 
 echo -ne "${MAGENTA}"
-printf "⚡ Loading ABDELRAHMAN RABIE XRAY PANEL ⚡" | type_text
+printf "⚡ Loading Abdelrahman AutoScript ⚡" | type_text
 echo -e "${NC}"
 
 loading "Loading System Modules"
@@ -194,7 +193,7 @@ clear
 
 # ================= HEADER =================
 
-theme_banner "⚡ PREMIUM XRAY CONTROL PANEL ⚡"
+theme_banner_main
 
 # ================= SYSTEM INFO =================
 
@@ -261,9 +260,6 @@ echo -e " ${MAGENTA}❮${GOLD}7${MAGENTA}❯${NC} ${WHITE}UDP ZIVPN${NC}    ${MA
 
 theme_end
 
-theme_section "DEVELOPER"
-echo -e " ${AQUA}Developer${NC} : ${GOLD}Eng.Abdelrahman Rabie${NC}"
-echo -e " ${AQUA}Edition${NC}   : ${WHITE}Royal Neon ${PANEL_VERSION}${NC}"
 theme_footer
 
 read -rp "$(echo -e "${GOLD}❯ Select Menu : ${NC}")" menu

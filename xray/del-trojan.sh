@@ -21,8 +21,8 @@ echo ""
 users=$(jq -r '.inbounds[] | select(.tag=="trojan-tls") | .settings.clients[].email' $CONFIG)
 
 if [[ -z "$users" ]]; then
-echo -e "${RED}Tidak ada user Trojan!${NC}"
-read -n 1 -s -r -p "Tekan apa saja untuk kembali..."
+echo -e "${RED}No Trojan users found!${NC}"
+read -n 1 -s -r -p "Press any key to return..."
 m-trojan
 exit
 fi
@@ -37,7 +37,7 @@ done
 echo ""
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-read -rp "👉 Masukkan username yang ingin dihapus: " user
+read -rp "👉 Enter the username to delete: " user
 
 jq --arg user "$user" '
 (.inbounds[] | select(.tag=="trojan-tls").settings.clients) |=
@@ -46,15 +46,15 @@ map(select(.email != $user))
 
 mv /tmp/config.json $CONFIG
 
-# hapus comment expiry
+# remove expiry comment
 sed -i "/#trojan $user/d" $CONFIG
 
 systemctl restart xray
 
 echo ""
-echo -e "${GREEN}✅ User Trojan '${user}' berhasil dihapus!${NC}"
+echo -e "${GREEN}✅ Trojan user '${user}' deleted successfully!${NC}"
 echo ""
 
-read -n 1 -s -r -p "Tekan apa saja untuk kembali ke menu..."
+read -n 1 -s -r -p "Press any key to return to the menu..."
 
 m-trojan

@@ -81,7 +81,7 @@ systemctl restart cron
 
 if [ ! -f ~/.acme.sh/acme.sh ]; then
 
-    echo -e "${GREEN}🔐 Menginstall acme.sh...${NC}"
+    echo -e "${GREEN}🔐 Installing acme.sh...${NC}"
 
     curl https://get.acme.sh | sh -s email=admin@$domain
 

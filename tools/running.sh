@@ -1,7 +1,7 @@
 #!/bin/bash
-# Submenu Status Service - by Eng.Abdelrahman Rabie
+# Service status submenu - by Eng.Abdelrahman Rabie
 
-# Warna
+# Colors
 NC='\e[0m'
 GREEN='\e[1;38;5;48m'
 YELLOW='\e[1;38;5;220m'
@@ -9,10 +9,10 @@ CYAN='\e[1;38;5;51m'
 
 clear
 echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${CYAN}          📡 STATUS LAYANAN AKTIF           ${NC}"
+echo -e "${CYAN}          📡 ACTIVE SERVICES STATUS           ${NC}"
 echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
-# Cek status layanan utama
+# Check main service status
 services=(
   "ssh"
   "dropbear"
@@ -28,5 +28,5 @@ for svc in "${services[@]}"; do
 done
 
 echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-read -n1 -r -p "⏎ Tekan enter untuk kembali ke menu utama..."
+read -n1 -r -p "⏎ Press enter to return to the main menu..."
 menu

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==========================================
-# Setup Script XRAY_AIO - Royal Neon Edition
+# Setup Script XRAY_AIO
 # Developed by Eng.Abdelrahman Rabie
 # XRAY + WireGuard + UDP ZIVPN
 # ==========================================
@@ -51,7 +51,7 @@ start_time=$(date +%s)
 # ==========================================
 
 if [ "${EUID}" -ne 0 ]; then
-    error "Script harus dijalankan sebagai root."
+    error "This script must be run as root."
     exit 1
 fi
 
@@ -60,7 +60,7 @@ fi
 # ==========================================
 
 if [ "$(systemd-detect-virt)" == "openvz" ]; then
-    error "OpenVZ tidak didukung. Gunakan KVM/VMWare."
+    error "OpenVZ is not supported. Use KVM/VMware."
     exit 1
 fi
 
@@ -146,10 +146,10 @@ clear
 theme_banner "DOMAIN SETUP"
 echo ""
 
-read -rp "$(echo -e "${GOLD}❯ Masukkan domain kamu : ${NC}")" domain
+read -rp "$(echo -e "${GOLD}❯ Enter your domain : ${NC}")" domain
 
 if [[ -z "$domain" ]]; then
-    error "Domain tidak boleh kosong!"
+    error "Domain must not be empty!"
     exit 1
 fi
 
@@ -164,7 +164,7 @@ done
 echo "IP=$domain" > /var/lib/ipvps.conf
 
 echo ""
-info "Domain berhasil diset: $domain"
+info "Domain set successfully: $domain"
 
 sleep 2
 
@@ -191,7 +191,7 @@ bash install/zivpn.sh
 # COPY MENU COMMAND
 # ==========================================
 
-info "Menyalin command menu..."
+info "Copying menu commands..."
 
 cp -f ssh/m-ssh /usr/bin/
 
@@ -243,7 +243,7 @@ chmod +x tools/*.sh
 # COPY RUNTIME SCRIPT
 # ==========================================
 
-info "Menyalin semua submenu ke /etc/autoscriptvpn/..."
+info "Copying all submenus to /etc/autoscriptvpn/..."
 
 mkdir -p /etc/autoscriptvpn/{ssh,xray,wg,udp,tools}
 
@@ -305,7 +305,7 @@ echo -e " Installation Time : $((elapsed / 60)) menit $((elapsed % 60)) detik"
 theme_footer
 
 echo ""
-echo -e "${green}♻️ VPS akan reboot dalam 10 detik...${NC}"
+echo -e "${green}♻️ The VPS will reboot in 10 seconds...${NC}"
 
 sleep 10
 

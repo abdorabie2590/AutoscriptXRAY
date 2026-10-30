@@ -7,7 +7,7 @@ RED='\033[0;38;5;203m'
 NC='\033[0m'
 
 DEPS_VERSION="deps-v2"
-RELEASE_URL="https://github.com/znandev/AutoscriptXRAY/releases/download/${DEPS_VERSION}"
+RELEASE_URL="https://github.com/abdorabie2590/AutoscriptXRAY/releases/download/${DEPS_VERSION}"
 
 clear
 

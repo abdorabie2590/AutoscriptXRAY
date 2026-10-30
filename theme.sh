@@ -1,13 +1,14 @@
 #!/bin/bash
 # ==========================================================
-#  ROYAL NEON THEME
+#  ABDELRAHMAN AUTOSCRIPT - THEME
 #  Developed by Eng.Abdelrahman Rabie
 #  Shared palette + UI helpers (256-colour terminals)
 #  Installed to /etc/autoscriptvpn/theme.sh by setup.sh
 # ==========================================================
 
 THEME_OWNER="Eng.Abdelrahman Rabie"
-THEME_NAME="ABDELRAHMAN RABIE"
+THEME_NAME="Abdelrahman AutoScript"
+THEME_EDITION="V3.0"
 TW=46                                   # inner width of boxes
 
 # ---------- palette ----------
@@ -59,12 +60,20 @@ center_row() {
         "$(_gc "${GRAD[${#GRAD[@]}-1]}")" "$NC"
 }
 
-# theme_banner "subtitle"
+# theme_banner ["subtitle"]  -> product name + optional subtitle (sub-menus)
 theme_banner() {
-    local sub="${1:-PREMIUM XRAY AUTOSCRIPT}"
     grad_line "╔" "═" "╗"
-    center_row "✦  A B D E L R A H M A N   R A B I E  ✦" "$GOLD"
-    center_row "$sub" "$AQUA"
+    center_row "✦  ${THEME_NAME}  ✦" "$GOLD"
+    [[ -n "$1" ]] && center_row "$1" "$AQUA"
+    grad_line "╚" "═" "╝"
+}
+
+# theme_banner_main -> product name + developer + edition (main menu)
+theme_banner_main() {
+    grad_line "╔" "═" "╗"
+    center_row "✦  ${THEME_NAME}  ✦" "$GOLD"
+    center_row "Developer: ${THEME_OWNER}" "$AQUA"
+    center_row "Edition ${THEME_EDITION}" "$PINK"
     grad_line "╚" "═" "╝"
 }
 
@@ -125,3 +134,69 @@ theme_ok()   { printf '%b[ ✔ ]%b %s\n' "$NEON" "$NC" "$1"; }
 theme_warn() { printf '%b[ ! ]%b %s\n' "$GOLD" "$NC" "$1"; }
 theme_err()  { printf '%b[ ✘ ]%b %s\n' "$ROSE" "$NC" "$1"; }
 theme_info() { printf '%b[ i ]%b %s\n' "$AQUA" "$NC" "$1"; }
+
+# ==========================================================
+#  Network info helpers (cached, multi-provider fallback)
+#  Fixes the "429 Rate limit hit" message from single-provider lookups.
+# ==========================================================
+CACHE_DIR="/etc/autoscriptvpn/cache"
+
+_cache_read() {   # _cache_read FILE MAX_AGE_SECONDS
+    [[ -s "$1" ]] || return 1
+    local age=$(( $(date +%s) - $(stat -c %Y "$1" 2>/dev/null || echo 0) ))
+    (( age <= $2 )) || return 1
+    cat "$1"
+}
+
+_cache_write() {  # _cache_write FILE VALUE
+    mkdir -p "$CACHE_DIR" 2>/dev/null && printf '%s' "$2" > "$1" 2>/dev/null
+}
+
+_valid_line() {   # reject JSON / error pages / empty / too long
+    [[ -n "$1" && ${#1} -le 80 && "$1" != *"{"* && "$1" != *"<"* \
+       && "$1" != *"rate limit"* && "$1" != *"Rate limit"* && "$1" != *"error"* ]]
+}
+
+get_public_ip() {
+    local ip url
+    ip=$(_cache_read "$CACHE_DIR/ip" 600) && { printf '%s' "$ip"; return; }
+    for url in https://ipv4.icanhazip.com https://api.ipify.org https://ifconfig.me/ip https://checkip.amazonaws.com; do
+        ip=$(curl -s --max-time 4 "$url" | tr -d '[:space:]')
+        if [[ "$ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+            _cache_write "$CACHE_DIR/ip" "$ip"
+            printf '%s' "$ip"; return
+        fi
+    done
+    printf '%s' "N/A"
+}
+
+# get_isp IP  -> hosting company / ISP name (cached per IP for 7 days)
+get_isp() {
+    local ip="$1" cached isp
+    if cached=$(_cache_read "$CACHE_DIR/isp" 604800) && [[ "${cached%%|*}" == "$ip" ]]; then
+        printf '%s' "${cached#*|}"; return
+    fi
+
+    local url body
+    for url in \
+        "http://ip-api.com/line/${ip}?fields=isp" \
+        "https://ipwho.is/${ip}" \
+        "https://ipapi.co/${ip}/org/" \
+        "https://api.iplocation.net/?ip=${ip}"; do
+        body=$(curl -s --max-time 4 "$url" 2>/dev/null | tr -d '\r')
+        case "$url" in
+            *ipwho.is*)        isp=$(printf '%s' "$body" | grep -oP '"isp":\s*"\K[^"]+' | head -n1) ;;
+            *iplocation.net*)  isp=$(printf '%s' "$body" | grep -oP '"isp":\s*"\K[^"]+' | head -n1) ;;
+            *)                 isp=$(printf '%s' "$body" | head -n1) ;;
+        esac
+        if _valid_line "$isp"; then
+            _cache_write "$CACHE_DIR/isp" "${ip}|${isp}"
+            printf '%s' "$isp"; return
+        fi
+    done
+
+    # reverse DNS as an offline-ish fallback
+    isp=$(getent hosts "$ip" 2>/dev/null | awk '{print $2}' | awk -F. 'NF>=2{print $(NF-1)"."$NF}')
+    _valid_line "$isp" && { printf '%s' "$isp"; return; }
+    printf '%s' "Unknown"
+}

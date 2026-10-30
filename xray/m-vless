@@ -1,5 +1,5 @@
 #!/bin/bash
-# Menu VLESS - by Eng.Abdelrahman Rabie
+# VLESS menu - by Eng.Abdelrahman Rabie
 
 GREEN='\e[1;38;5;48m'
 YELLOW='\e[1;38;5;220m'
@@ -13,14 +13,14 @@ done
 
 clear
 theme_banner "MENU VLESS XRAY"
-theme_item "1" "Tambah Akun VLESS"
-theme_item "2" "Hapus Akun VLESS"
-theme_item "3" "Cek Login VLESS"
-theme_item "4" "Perpanjang Masa Aktif Akun"
-theme_item "x" "Kembali ke menu utama"
+theme_item "1" "Add VLESS Account"
+theme_item "2" "Delete VLESS Account"
+theme_item "3" "Check VLESS Login"
+theme_item "4" "Renew Account"
+theme_item "x" "Back to main menu"
 theme_footer
 
-read -p "$(echo -e "${GOLD}👉 Pilih opsi: ${NC}")" opt
+read -p "$(echo -e "${GOLD}👉 Select option: ${NC}")" opt
 
 case $opt in
 1)
@@ -32,7 +32,7 @@ bash /etc/autoscriptvpn/xray/del-vless.sh
 ;;
 
 3)
-bash /etc/autoscriptvpn/xray/cek-vless.sh
+bash /etc/autoscriptvpn/xray/check-vless.sh
 ;;
 
 4)
@@ -44,7 +44,7 @@ menu
 ;;
 
 *)
-echo "❌ Pilihan salah!"
+echo "❌ Invalid option!"
 sleep 1
 m-vless
 ;;
