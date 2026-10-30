@@ -17,11 +17,6 @@
 | Go Services | Native Dropbear WS, Native Stunnel WS, Multi-Connection Support                   |
 
 ---
-
-## Screenshot
-
-![dashboard1](./img/menu.gif)
-
 Open menu:
 
 ```bash
